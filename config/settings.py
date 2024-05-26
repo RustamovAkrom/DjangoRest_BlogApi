@@ -87,15 +87,24 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # POSTGREST_HOST
 # POSTGREST_PASSWORD
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('POSTGREST_DB'),
-        'USER': os.getenv('POSTGREST_USER'),
-        'HOST': os.getenv('POSTGREST_HOST'),
-        'PASSWORD': os.getenv('POSTGREST_PASSWORD'),
+if os.getenv("DEPLOY_ON_GITHUB"):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv('POSTGREST_DB'),
+            'USER': os.getenv('POSTGREST_USER'),
+            'HOST': os.getenv('POSTGREST_HOST'),
+            'PASSWORD': os.getenv('POSTGREST_PASSWORD'),
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
